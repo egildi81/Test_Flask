@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, AuthorForm
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from forms import AuthorForm
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
