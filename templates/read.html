@@ -1,0 +1,89 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block content %}
+    <h1>Example</h1>
+    <form method="post" action="{{ url_for('create') }}">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    <hr>
+    <h2>Examples:</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for example in examples %}
+                <tr>
+                    <td>{{ example.id }}</td>
+                    <td>{{ example.name }}</td>
+                    <td>{{ example.title }}</td>
+                    <td>
+                        <form method="post" action="{{ url_for('update') }}">
+                            <input type="hidden" name="id" value="{{ example.id }}">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" value="{{ example.name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="title" value="{{ example.title }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Update</button>
+                        </form>
+                        <form method="post" action="{{ url_for('delete') }}" style="display: inline-block;">
+                            <input type="hidden" name="id" value="{{ example.id }}">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    <h2>Search:</h2>
+    <div class="form-group">
+        <label for="search">Search:</label>
+        <input type="text" class="form-control" id="search" name="search">
+    </div>
+    <div class="form-group">
+        <label for="result">Result:</label>
+        <input type="text" class="form-control" id="result" name="result" readonly>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='jquery-ui/jquery-ui.min.js') }}"></script>
+    <script>
+        $(function() {
+            $("#search").autocomplete({
+                source: function(request, response) {
+                    $.getJSON("/autocomplete", {
+                        search: request.term
+                    }, function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label: item.value,
+                                value: item.id
+                            }
+                        }))
+                    })
+                },
+                select: function(event, ui) {
+                    $("#result").val(ui.item.label);
+                }
+            });
+        });
+    </script>
+{% endblock %}

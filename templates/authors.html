@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Authors{% endblock %}
+
+{% block content %}
+  <h1>Authors</h1>
+  <a href="{{ url_for('add_author') }}" class="btn btn-primary mb-2">Add Authors</a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Author</th>
+        <th>Books</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for author in authors %}
+        <tr>
+          <td>{{ author.name }}</td>
+          <td>
+            {% for book in author.books %}
+              {{ book.title }}
+              {% if not loop.last %}, {% endif %}
+            {% else %}
+              No books
+            {% endfor %}
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="2">No authors found</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
