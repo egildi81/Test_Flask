@@ -58,17 +58,17 @@ def add_book():
         return redirect(url_for('books'))
     return render_template('add_book.html', authors=authors)
 
-
 @app.route('/add_author', methods=['GET', 'POST'])
 def add_author():
-    if request.method == 'POST':
-        name = request.form['name']
-        author = Author(name=name)
+    form = AuthorForm()
+    if form.validate_on_submit():
+        author = Author(name=form.name.data, email=form.email.data)
         db.session.add(author)
         db.session.commit()
-        flash('Author added successfully!')
+        flash('Author added successfully.')
         return redirect(url_for('authors'))
-    return render_template('add_author.html')
+
+    return render_template('add_author.html', form=form)
 
 
 if __name__ == '__main__':
