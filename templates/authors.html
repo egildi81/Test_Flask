@@ -10,6 +10,7 @@
       <tr>
         <th>Author</th>
         <th>Books</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -24,6 +25,9 @@
               No books
             {% endfor %}
           </td>
+          <td>
+            <a href="{{ url_for('edit_author_redirect', id=author.id) }}">Edit</a>
+        </td>
         </tr>
       {% else %}
         <tr>
