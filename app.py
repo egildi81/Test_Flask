@@ -72,6 +72,7 @@ def add_author():
 
     return render_template('add_author.html', form=form)
 
+
 @app.route('/author/<int:id>/edit', methods=['GET', 'POST'])
 def edit_author(id):
     author = Author.query.get(id)
@@ -88,6 +89,25 @@ def edit_author(id):
 @app.route('/author/<int:id>/edit')
 def edit_author_redirect(id):
     return redirect(url_for('edit_author', id=id))
+
+
+@app.route('/author/<int:id>/delete', methods=['GET', 'POST'])
+def delete_author(id):
+    author = Author.query.get(id)
+    form = AuthorForm(obj=author)
+
+    if form.validate_on_submit():
+        form.populate_obj(author)
+        db.session.delete(author)
+        db.session.commit()
+        flash('Author deleted successfully', 'success')
+        return redirect(url_for('authors'))
+
+    return render_template('delete_author.html', form=form, delete=True)
+
+@app.route('/author/<int:id>/delete')
+def delete_author_redirect(id):
+    return redirect(url_for('delete_author', id=id))
 
 if __name__ == '__main__':
     db.create_all()

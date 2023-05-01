@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Supprimer l'auteur {{ author.name }}</h1>
+  <p>Êtes-vous sûr de vouloir supprimer l'auteur "{{ author.name }}" ? Cette action est irréversible.</p>
+  <form method="POST" action="{{ url_for('delete_author', author_id=author.id) }}">
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Annuler</a>
+  </form>
+{% endblock %}
